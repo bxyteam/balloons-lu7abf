@@ -1,0 +1,1666 @@
+    /* Modern Purple Theme */
+    :root {
+        --primary: #312e81;
+        --primary-dark: #1e1b4b;
+        --primary-light: #3730a3;
+        --accent: #ED8936;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, Tahoma, sans-serif;
+        font-size: 12px;
+        background: #F7FAFC;
+        /* overflow: hidden; */
+        height: 100dvh;
+    }
+
+    .main-container {
+        display: none;
+        flex-direction: column;
+        height: 100dvh;
+    }
+
+    /* Header */
+    .header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 12px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        flex-shrink: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Menu with search */
+    .menu {
+        background: linear-gradient(135deg, var(--primary-light), var(--primary));
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        align-items: center;
+        flex-shrink: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .menu-left {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        justify-self: start;
+    }
+
+    .menu a {
+        color: white;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+
+    .menu a:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Balloon search */
+    .balloon-search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-self: center;
+    }
+
+    .balloon-search {
+        padding: 6px 32px 6px 12px;
+        border: 2px solid white;
+        border-radius: 20px;
+        font-size: 12px;
+        width: 200px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #2D3748;
+        font-weight: 500;
+    }
+
+    .balloon-search:focus {
+        outline: none;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* X button to close dropdown */
+    .search-clear-btn {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--primary);
+        color: white;
+        border: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .search-clear-btn.visible {
+        display: flex;
+    }
+
+    .search-clear-btn:hover {
+        background: var(--primary-dark);
+    }
+
+    /* Balloon dropdown */
+    .balloon-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+        background: white;
+        border: 2px solid var(--primary);
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        margin-top: 5px;
+        z-index: 9999;
+    }
+
+    .balloon-dropdown.active {
+        display: block;
+    }
+
+    .balloon-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #E2E8F0;
+        transition: background 0.2s;
+    }
+
+    .balloon-item:hover {
+        background: #EDF2F7;
+    }
+
+    .balloon-item .callsign {
+        font-weight: bold;
+        color: var(--primary);
+        font-size: 12px;
+    }
+
+    .balloon-item .details {
+        font-size: 10px;
+        color: #718096;
+        margin-top: 2px;
+    }
+
+    .menu-right {
+        justify-self: end;
+        padding-right: 5px;
+    }
+
+    .menu-right h1 {
+        color: white;
+    }
+
+    /* Map */
+    #map-container {
+        width: 100%;
+        height: 65dvh;
+        min-height: 65dvh;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        column-gap: 10px;
+    }
+
+    #map {
+        width: 100%;
+        height: 100%;
+    }
+
+    .icons-map {
+        width: 1.5rem;
+        height: 1.5rem;
+        transition: stroke 0.2s;
+        cursor: pointer;
+    }
+
+    .icons-map:hover {
+        stroke: var(--accent);
+    }
+
+    .icons-map-anchor {
+        color: #ffffff;
+        font-size: 16px;
+        line-height: 12px;
+        font-family: Arial Narrow;
+        align-content: center;
+        text-shadow: 2px 2px #000000;
+        text-align: center;
+    }
+
+    .icons-map-anchor:hover {
+        color: var(--accent);
+    }
+
+    .icons-map-anchor-blank {
+        line-height: 20px;
+    }
+
+    /* Control Form - PROPER STYLES */
+    .control-form {
+        background: white;
+        padding: 15px;
+        border-top: 3px solid var(--primary);
+        flex-shrink: 0;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        font-size: 11px;
+        font-family: Tahoma, Arial;
+    }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .form-row:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Form controls */
+    .form-row input[type="text"],
+    .form-row select {
+        padding: 5px 8px;
+        border: 2px solid #CBD5E0;
+        border-radius: 4px;
+        font-size: 11px;
+        font-family: monospace;
+        font-weight: bold;
+        transition: border-color 0.2s;
+    }
+
+    .form-row input[type="text"]:focus,
+    .form-row select:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    .form-row input[type="checkbox"] {
+        cursor: pointer;
+        width: 14px;
+        height: 14px;
+    }
+
+    .form-row label {
+        font-weight: bold;
+        color: #2D3748;
+        font-size: 11px;
+    }
+
+    /* Form buttons/links */
+    .upload-button {
+        background: var(--accent);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 11px;
+        transition: background 0.2s;
+        cursor: pointer;
+        border: none;
+        display: inline-block;
+    }
+
+    .upload-button:hover {
+        background: #DD6B20;
+        text-decoration: none;
+    }
+
+    .sondehub-link {
+        background: #E53E3E;
+        color: yellow;
+        text-shadow: 1px 1px 0 black;
+        border: 2px solid black;
+        border-radius: 12px;
+        padding: 4px 10px;
+        font-size: 13px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+    }
+
+    .clickable-span {
+        cursor: pointer;
+        border: 1px solid #CBD5E0;
+        padding: 5px 10px;
+        border-radius: 6px;
+        background: #F7FAFC;
+        transition: all 0.2s;
+        display: inline-block;
+        font-size: 11px;
+    }
+
+    .clickable-span:hover {
+        background: #EDF2F7;
+        border-color: var(--primary);
+    }
+
+    .ok-button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 6px 20px;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 11px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .ok-button:hover {
+        background: var(--primary-dark);
+    }
+
+    /* Tables container */
+    .tables-container {
+        flex-shrink: 0;
+        height: 300px;
+        background: #fff;
+        border-top: 3px solid var(--primary);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .table-controls {
+        background: linear-gradient(to right, #EDF2F7, #E2E8F0);
+        padding: 8px 12px;
+        border-bottom: 2px solid #CBD5E0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    .table-controls button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 11px;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .table-controls button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+
+    /* Tabs */
+    .table-tabs {
+        display: flex;
+        background: #F7FAFC;
+        border-bottom: 2px solid var(--primary);
+        flex-shrink: 0;
+    }
+
+    .table-tab {
+        padding: 10px 24px;
+        cursor: pointer;
+        background: #E2E8F0;
+        border-right: 1px solid #CBD5E0;
+        font-weight: 600;
+        font-size: 11px;
+        color: #2D3748;
+        transition: all 0.2s;
+    }
+
+    .table-tab:hover {
+        background: #CBD5E0;
+    }
+
+    .table-tab.active {
+        background: white;
+        color: var(--primary);
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: -2px;
+    }
+
+    /* Table content */
+    .table-content {
+        flex: 1;
+        overflow-y: auto;
+        background: white;
+    }
+
+    .table-panel {
+        display: none;
+        padding: 12px;
+    }
+
+    .table-panel.active {
+        display: block;
+    }
+
+    #estaciones {
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 14px;
+        font-weight: normal;
+        text-align: left;
+        background-color: #fff7e6;
+        padding: 10px;
+    }
+
+    /* The Grid Logic */
+    .reporters-grid {
+        border-collapse: collapse;
+        table-layout: fixed;
+        /* Forces fixed cell widths */
+        width: auto;
+        margin-bottom: 5px;
+    }
+
+    .reporters-grid td {
+        border: 1px solid #ddd;
+        /* Subtle grid lines */
+        height: 18px;
+        /* Fixed height */
+        padding: 2px 4px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: clip;
+        vertical-align: middle;
+    }
+
+    /* Fixed widths for consistency */
+    .col-label {
+        width: 100px;
+        background-color: #f0ece2;
+        font-weight: bold;
+    }
+
+    .col-data {
+        width: 75px;
+        text-align: center;
+    }
+
+    #estaciones hr {
+        border: none;
+        border-top: 1px solid #999;
+        margin: 8px 0;
+    }
+
+    #estaciones a {
+        text-decoration: none;
+        display: block;
+        /* Makes the whole cell clickable */
+        width: 100%;
+        height: 100%;
+    }
+
+    #estaciones a:hover {
+        filter: brightness(90%);
+    }
+
+    /* Telemetry tables */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-family: 'Arial Narrow', Arial;
+        font-size: 11px;
+    }
+
+    table th {
+        background: linear-gradient(to bottom, #E2E8F0, #CBD5E0);
+        padding: 6px 8px;
+        text-align: left;
+        font-weight: bold;
+        border: 1px solid #A0AEC0;
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    table td {
+        padding: 4px 8px;
+        border: 1px solid #E2E8F0;
+        white-space: nowrap;
+    }
+
+    table tr:nth-child(even) {
+        background: #F7FAFC;
+    }
+
+    table tr:hover {
+        background: #EDF2F7;
+    }
+
+    /* Overlay modes */
+    .tables-container.overlay {
+        position: fixed;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 1400px;
+        height: 75vh;
+        z-index: 2000;
+        box-shadow: 0 8px 32px rgba(107, 70, 193, 0.3);
+        border-radius: 12px;
+    }
+
+    .tables-container.fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 3000;
+    }
+
+    .close-btn {
+        display: none;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: linear-gradient(135deg, #FC8181, #E53E3E);
+        color: white;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 22px;
+        font-weight: bold;
+        z-index: 10;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tables-container.overlay .close-btn,
+    .tables-container.fullscreen .close-btn {
+        display: flex;
+    }
+
+    .close-btn:hover {
+        background: linear-gradient(135deg, #E53E3E, #C53030);
+        transform: scale(1.1);
+    }
+
+    .overlay-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(107, 70, 193, 0.3);
+        backdrop-filter: blur(2px);
+        z-index: 1999;
+    }
+
+    .overlay-backdrop.active {
+        display: block;
+    }
+
+    /* Scrollbar */
+    .table-content::-webkit-scrollbar,
+    .balloon-dropdown::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+
+    .table-content::-webkit-scrollbar-track,
+    .balloon-dropdown::-webkit-scrollbar-track {
+        background: #F7FAFC;
+    }
+
+    .table-content::-webkit-scrollbar-thumb,
+    .balloon-dropdown::-webkit-scrollbar-thumb {
+        background: var(--primary-light);
+        border-radius: 6px;
+    }
+
+    .table-content::-webkit-scrollbar-thumb:hover,
+    .balloon-dropdown::-webkit-scrollbar-thumb:hover {
+        background: var(--primary);
+    }
+
+    /* ---- Skeleton Loader Base ---- */
+    .skeleton {
+        background-color: #f0f0f0;
+        border-radius: 2px;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .chart-buttons-outer {
+        position: absolute;
+        top: -99999px;
+        right: -99999px;
+        display: "none";
+    }
+    .chartbutton {
+        font-size: 12px;
+        line-height: 12px;
+        font-family: Arial Narrow;
+        font-style: italic;
+        background-color: transparent;
+        color: navy;
+        border-style: outset;
+        border-width: 3px;
+        border-radius: 15px;
+        border-color: orange;
+        box-shadow: 2px 2px 2px #999;
+        padding: 4px 8px;
+        cursor: pointer;
+        transition: color 0.2s;
+        white-space: nowrap;
+        min-width: 100px;
+        text-align: center;
+    }
+
+    .chartbutton:hover {
+        font-size: 12px;
+        line-height: 12px;
+        font-style: italic;
+        border-style: outset;
+        background-color: transparent;
+        border-width: 3px;
+        border-radius: 15px;
+        border-color: orange;
+        box-shadow: 2px 2px 2px #999;
+        color: red;
+    }
+
+    .chartbutton:active {
+        border-style: inset;
+    }
+
+    /* ---- Map Skeleton ---- */
+    #map-skeleton {
+        width: 100%;
+        height: 100%;
+        background-color: #e9ecef;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #ccc;
+    }
+
+    #map-skeleton::before {
+        content: "🗺️ Loading map...";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: monospace;
+        font-size: 20px;
+        color: var(--primary-light);
+    }
+
+    /* ---- Table Skeleton ---- */
+    #telemetry1-table-sk.skeleton,
+    #telemetry2-table-sk.skeleton,
+    #reporters-table-sk.skeleton {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 11px;
+    }
+
+    .skeleton-row {
+        height: 16px;
+    }
+
+    .skeleton-cell {
+        padding: 12px;
+        background: #f0f0f0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Telemetry 1/2: 13 columns */
+    .skeleton-telemetry .skeleton-cell {
+        width: calc(100% / 13);
+    }
+
+    /* Reporters: matches ASP layout */
+    #reporters-table.skeleton {
+        background-color: #fff7e6;
+        white-space: nowrap;
+        padding: 10px;
+        display: block;
+    }
+
+    .skeleton-reporters-line {
+        height: 15px;
+        margin: 2px 0;
+        background: #f0f0f0;
+        border-radius: 1px;
+    }
+
+/* ============================================================================
+   MOBILE RESPONSIVE STYLES - WSPR Balloon Tracker
+   Complete mobile optimization with improved pagination
+   ============================================================================ */
+
+/* ============================================================================
+   BASE RESPONSIVE ADJUSTMENTS
+   ============================================================================ */
+
+/* Improve base viewport handling */
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 10px;
+    overflow-x: hidden;
+  }
+
+  /* Header adjustments */
+  .header {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  /* Menu responsive layout */
+  .menu {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .menu-left {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .menu a {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .balloon-search-container {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .balloon-search {
+    width: 100%;
+    max-width: 100%;
+    font-size: 11px;
+  }
+
+  .balloon-dropdown {
+    width: 100%;
+    max-width: calc(100vw - 20px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .menu-right {
+    justify-self: center;
+  }
+
+  .menu-right h1 {
+    font-size: 14px;
+  }
+
+  /* Add collapse toggle for form on mobile */
+  .form-container {
+    position: relative;
+  }
+
+  .form-container::before {
+    content: 'ℹ️ Tap to expand/collapse form';
+    display: block;
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    margin: -12px -12px 8px -12px;
+  }
+
+  .form-container.collapsed {
+    max-height: 44px;
+    overflow: hidden;
+  }
+
+  .form-container.collapsed .form-section {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   MAP CONTAINER RESPONSIVE
+   ============================================================================ */
+
+@media screen and (max-width: 768px) {
+  #map-container {
+    min-height: 75dvh;
+    height: 75dvh;
+  }
+
+  .leaflet-control-zoom {
+    transform: scale(1.2);
+  }
+}
+
+/* ============================================================================
+   FORM CONTAINER RESPONSIVE
+   ============================================================================ */
+
+@media screen and (max-width: 1024px) {
+  .form-container {
+    grid-template-columns: 1fr !important;
+    padding: 12px;
+    gap: 12px;
+    max-height: none;
+    overflow: visible;
+    display: grid !important;
+  }
+
+  .form-section {
+    margin-bottom: 8px;
+    display: block !important;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group {
+    width: 100%;
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100% !important;
+    font-size: 12px;
+    padding: 6px;
+    display: block !important;
+  }
+
+  .form-group label {
+    font-size: 10px;
+    display: block !important;
+  }
+
+  .launch-info {
+    font-size: 10px;
+    display: block !important;
+  }
+
+  /* APRS.fi section - ensure visibility */
+  #aprsfi {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  #aprsfi label {
+    font-size: 10px;
+    display: flex !important;
+    align-items: center;
+    gap: 4px;
+  }
+
+  #aprsfi input[type="checkbox"] {
+    width: auto !important;
+    margin-right: 4px;
+  }
+
+  #aprsfi span {
+    display: inline-block !important;
+    font-size: 11px;
+    margin: 4px 0;
+  }
+
+  #aprsfi .upload-button,
+  #aprsfi button {
+    width: 100% !important;
+    font-size: 11px !important;
+    padding: 10px !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  #btnUpload {
+    display: block !important;
+    visibility: visible !important;
+  }
+ 
+}
+
+/* ============================================================================
+   TABLES CONTAINER - COMPLETE MOBILE OVERHAUL
+   ============================================================================ */
+
+@media screen and (max-width: 1024px) {
+  /* Reorder elements on mobile - MAP FIRST */
+  .main-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #map-container {
+    order: 1 !important;
+    min-height: 65dvh;
+    height: 65dvh;
+    max-height: 70dvh;
+  }
+
+  /* Chart buttons container - position after map */
+  #chart-buttons-container {
+    order: 2 !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-top: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+  }
+
+  #chart-buttons-container button {
+    flex: 1 1 calc(25% - 6px);
+    /* min-width: 70px; */
+    max-width: none;
+    /* height: 60px; */
+    font-size: 10px;
+    padding: 4px 2px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .form-container {
+    order: 3 !important;
+  }
+
+  #tables-container {
+    order: 4 !important;
+    max-height: none;
+    height: auto;
+    min-height: 400px;
+  }
+
+  .table-controls {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .table-controls > div {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .table-controls button {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
+    max-width: none;
+    font-size: 10px;
+    padding: 10px 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Specific styling for overlay/fullscreen/export buttons */
+  .table-controls button[onclick*="Overlay"],
+  .table-controls button[onclick*="Fullscreen"],
+  .table-controls button[onclick*="Export"],
+  .table-controls button[onclick*="overlay"],
+  .table-controls button[onclick*="fullscreen"],
+  .table-controls button[onclick*="export"] {
+    flex: 1 1 calc(33.333% - 6px);
+    font-size: 11px;
+    padding: 10px 6px;
+  }
+
+  /* Table tabs - horizontal scroll on mobile */
+  .table-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    padding: 0 8px;
+  }
+
+  .table-tab {
+    display: inline-block;
+    font-size: 11px;
+    padding: 8px 12px;
+    min-width: auto;
+  }
+
+  /* Table content */
+  .table-content {
+    padding: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Overlay and fullscreen adjustments */
+  #tables-container.overlay,
+  #tables-container.fullscreen {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+  }
+
+  #tables-container.overlay .table-content,
+  #tables-container.fullscreen .table-content {
+    padding: 8px;
+  }
+
+  .overlay-button {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   TELEMETRY TABLES - HORIZONTAL SCROLL WITH FIXED FIRST COLUMN
+   ============================================================================ */
+
+@media screen and (max-width: 1024px) {
+  /* Wrapper for horizontal scroll */
+  .table-panel {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .telemetry-table {
+    font-size: 10px;
+    min-width: 900px; /* Ensure table doesn't compress */
+    display: block;
+    overflow-x: auto;
+  }
+
+  .telemetry-table thead,
+  .telemetry-table tbody,
+  .telemetry-table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .telemetry-table th,
+  .telemetry-table td {
+    padding: 6px 4px;
+    font-size: 9px;
+  }
+
+  /* Optional: Make first column sticky */
+  .telemetry-table th:first-child,
+  .telemetry-table td:first-child {
+    position: sticky;
+    left: 0;
+    background: inherit;
+    z-index: 10;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+  }
+
+  .telemetry-table thead th:first-child {
+    z-index: 11;
+  }
+}
+
+/* ============================================================================
+   PAGINATION CONTROLS - COMPLETELY REDESIGNED FOR MOBILE
+   ============================================================================ */
+
+/* Desktop pagination (base styles - improved) */
+#telemetryControls,
+#telemetry2Controls,
+.pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#telemetryControls label,
+#telemetry2Controls label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#rowsPerPageSelector,
+#rowsPerPageSelector2 {
+  padding: 6px 12px;
+  font-size: 13px;
+  border: 2px solid #cbd5e0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#rowsPerPageSelector:hover,
+#rowsPerPageSelector2:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(49, 46, 129, 0.1);
+}
+
+#paginationInfo,
+#paginationInfo2 {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+/* Pagination buttons container */
+#paginationControls,
+#paginationControls2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Improved button styling */
+#prevPageBtn,
+#nextPageBtn,
+#prevPageBtn2,
+#nextPageBtn2,
+#jumpPageBtn,
+#jumpPageBtn2 {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  background: white;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  min-width: 100px;
+}
+
+#prevPageBtn:hover:not(:disabled),
+#nextPageBtn:hover:not(:disabled),
+#prevPageBtn2:hover:not(:disabled),
+#nextPageBtn2:hover:not(:disabled),
+#jumpPageBtn:hover,
+#jumpPageBtn2:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+#prevPageBtn:disabled,
+#nextPageBtn:disabled,
+#prevPageBtn2:disabled,
+#nextPageBtn2:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: #cbd5e0;
+  color: #a0aec0;
+}
+
+#pageInfo,
+#pageInfo2 {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 14px;
+  padding: 0 12px;
+}
+
+/* Jump to page input */
+#jumpPageInput,
+#jumpPageInput2 {
+  padding: 8px 12px;
+  font-size: 13px;
+  width: 70px;
+  border: 2px solid #cbd5e0;
+  border-radius: 6px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+#jumpPageInput:focus,
+#jumpPageInput2:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(49, 46, 129, 0.1);
+}
+
+/* ============================================================================
+   MOBILE PAGINATION - OPTIMIZED FOR TOUCH
+   ============================================================================ */
+
+@media screen and (max-width: 768px) {
+  /* Controls section */
+  #telemetryControls,
+  #telemetry2Controls {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  #telemetryControls label,
+  #telemetry2Controls label {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
+  #rowsPerPageSelector,
+  #rowsPerPageSelector2 {
+    width: auto;
+    min-width: 80px;
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  #paginationInfo,
+  #paginationInfo2 {
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    padding: 6px;
+    background: white;
+    border-radius: 6px;
+  }
+
+  /* Pagination controls */
+  #paginationControls,
+  #paginationControls2 {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    margin-top: 12px;
+  }
+
+  /* Button row */
+  #paginationControls > *:not(span[style*="margin-left"]),
+  #paginationControls2 > *:not(span[style*="margin-left"]) {
+    width: 100%;
+  }
+
+  #prevPageBtn,
+  #nextPageBtn,
+  #prevPageBtn2,
+  #nextPageBtn2 {
+    width: 100%;
+    min-width: unset;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin: 0;
+  }
+
+  #pageInfo,
+  #pageInfo2 {
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    font-size: 13px;
+    background: white;
+    border-radius: 6px;
+    margin: 0;
+  }
+
+  /* Jump to page section - full width */
+  #paginationControls span[style*="margin-left"],
+  #paginationControls2 span[style*="margin-left"] {
+    width: 100%;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #jumpPageInput,
+  #jumpPageInput2 {
+    width: 80px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  #jumpPageBtn,
+  #jumpPageBtn2 {
+    flex: 1;
+    min-width: 100px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Extra small devices (phones < 400px) */
+@media screen and (max-width: 400px) {
+  #telemetryControls,
+  #telemetry2Controls,
+  #paginationControls,
+  #paginationControls2 {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  #prevPageBtn,
+  #nextPageBtn,
+  #prevPageBtn2,
+  #nextPageBtn2,
+  #jumpPageBtn,
+  #jumpPageBtn2 {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  #pageInfo,
+  #pageInfo2 {
+    font-size: 12px;
+  }
+}
+
+/* ============================================================================
+   TOUCH-FRIENDLY IMPROVEMENTS
+   ============================================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets */
+  .menu a,
+  .table-tab,
+  .table-controls button,
+  #prevPageBtn,
+  #nextPageBtn,
+  #prevPageBtn2,
+  #nextPageBtn2,
+  #jumpPageBtn,
+  #jumpPageBtn2 {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Remove hover effects on touch devices */
+  .menu a:hover,
+  .table-tab:hover,
+  .table-controls button:hover {
+    transform: none;
+  }
+
+  /* Add active state for touch feedback */
+  .menu a:active,
+  .table-tab:active,
+  .table-controls button:active,
+  #prevPageBtn:active:not(:disabled),
+  #nextPageBtn:active:not(:disabled),
+  #prevPageBtn2:active:not(:disabled),
+  #nextPageBtn2:active:not(:disabled),
+  #jumpPageBtn:active,
+  #jumpPageBtn2:active {
+    transform: scale(0.97);
+    opacity: 0.8;
+  }
+}
+
+/* ============================================================================
+   LANDSCAPE ORIENTATION OPTIMIZATIONS
+   ============================================================================ */
+
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .main-container {
+    height: 100vh;
+  }
+
+  #map-container {
+    height: 50vh;
+  }
+
+  .form-container {
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+
+  #tables-container {
+    max-height: 45vh;
+  }
+}
+
+/* ============================================================================
+   CHART BUTTONS - MOBILE OPTIMIZATION
+   ============================================================================ */
+
+@media screen and (max-width: 768px) {
+  /* Ensure chart buttons container exists and is visible */
+  #chart-buttons-container,
+  .chart-buttons,
+  [id*="chart"][id*="button"] {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px !important;
+    padding: 8px !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    margin: 0 !important;
+  }
+
+  /* Individual chart buttons - 4 columns with fixed height */
+  #chart-buttons-container button,
+  .chart-buttons button,
+  button[onclick*="chart"],
+  button[onclick*="Chart"] {
+    flex: 1 1 calc(25% - 4px) !important;
+    max-width: none !important;
+    font-size: 14px !important;
+    padding: 4px 2px !important;
+    margin: 0 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.1 !important;
+    border-radius: 4px !important;
+    background: white !important;
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    word-wrap: break-word !important;
+  }
+
+  button[onclick*="chart"]:active,
+  button[onclick*="Chart"]:active {
+    background: var(--primary) !important;
+    color: white !important;
+  }
+}
+
+/* Extra small screens - 3 buttons per row with smaller height */
+@media screen and (max-width: 400px) {
+  #chart-buttons-container button,
+  .chart-buttons button,
+  button[onclick*="chart"],
+  button[onclick*="Chart"] {
+    flex: 1 1 calc(33.333% - 4px) !important;
+    min-width: 0 !important;
+    height: 50px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+    font-size: 10px !important;
+    padding: 3px 2px !important;
+    border:rgba(0, 0, 0, 0.15) solid var(--primary) !important;
+  }
+}
+
+/* ============================================================================
+   SCROLL INDICATORS FOR TABLES
+   ============================================================================ */
+
+@media screen and (max-width: 1024px) {
+  .table-panel {
+    position: relative;
+  }
+
+  /* Add shadow to indicate scrollable content */
+  .table-panel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .table-panel.has-scroll::after {
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  .menu,
+  .table-controls,
+  .table-tabs,
+  #paginationControls,
+  #paginationControls2,
+  #telemetryControls,
+  #telemetry2Controls {
+    display: none !important;
+  }
+
+  .table-panel {
+    display: block !important;
+  }
+
+  .telemetry-table {
+    font-size: 8pt;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================================================ */
+
+/* Focus indicators */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .table-tab,
+  button {
+    border-width: 2px;
+  }
+
+  .telemetry-table th,
+  .telemetry-table td {
+    border: 1px solid currentColor;
+  }
+}
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.4;
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+
+    /* Mobile responsive */
+    /* @media (max-width: 768px) {
+      .header {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .menu {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .balloon-search {
+        width: 100%;
+      }
+
+      .control-form {
+        padding: 10px;
+      }
+
+      .form-row {
+        gap: 6px;
+        font-size: 10px;
+      }
+
+      .tables-container {
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        font-size: 12px;
+      }
+
+      .tables-container {
+        height: 200px;
+      }
+    }
+   */

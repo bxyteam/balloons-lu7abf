@@ -1,298 +1,605 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            rel="SHORTCUT ICON"
-            href="https://i.postimg.cc/CxdffJFs/aprs.png"
-        />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta
-            name="TITLE"
-            content="AMSAT Argentina provides usefull info for radio amateurs interested in the amateur satellite program, latest AMSAT bulletins, keps and Argentina AMSAT and LUSAT history."
-        />
-        <meta name="GENERATOR" content="Amsat Argentina AMSAT-LU Site" />
-        <meta name="AUTHOR" content="Amsat Argentina WebMasters lu7abf" />
-        <meta name="rating" content="General" />
-        <meta
-            name="DESCRIPTION"
-            content="AMSAT-LU is the organisation representing Argentina radio operators interests in design, build, launch and communicate through amateur satellites orbiting the earth. Amsat Argentina es una organizacion orientada a proyectar, armar, lanzar y operar satelites y comunicaciones espaciales. Ha lanzado el LUSAT y proximamente el VoxSat y el Lusac."
-        />
-        <meta
-            name="abstract"
-            content="Amsat Argentina Radio Amateur Satellites site: LUSAT, VoxSat, Experiments, Ballons, Space Comms, Diagrams, Circuits, Operation, Education"
-        />
-        <meta
-            name="KEYWORDS"
-            content="AMSAT Argentina,AMSAT-LU,AMSAT,Argentina,Amateur Satellites,satelites,Amateur Radio,Balloon, PicoBalloon, Space,LUSAT,LUSAT-1,VOXSAT,LUSAC,Telemetry,Telemetria,CW,telegraphy,telegrafia,morse,Globos,Ballons,Diagrams,Diagramas,Circuits,Circuitos,CETRA,Encuestas, Encuesta, Poll, Polls, Experiments,Experimentos,CONEA,Retina,Tracking,Orbits,Orbita,Orbitas,South,Sud,Shuttle,ISS,AO-19,Oscar,Rocket,Packet,downlink,uplinkuency,antenna,equipment,kepler,keplerian,iaru,wireless,repeater,transponder,digital,education,hsg,speed,projects,launch,satellite,ham,amsat-na,amsat-dl,amsat-uk,amsat-ce,amsat-ea,amsat-i,amsat-france,amsat-zl,jamsat,sa-amsat,surrey,sweeting,jan king,uosat,surrey,echo,microsat,nanosat,lu7aa,kb5mu,a0-40,pcsat,weber,pacsat,lu1esy,lw7dxf,lu7dsu,lu2amw,lw2dtz,lu7abf,lu7jcn,lu6dyd,lu6elo,lu4enq,carou,lu6dwc,lu8dyf,lu7xac,lu2aoq,lu5abm,lu4aey,lu3agj,rca,lu2fhe,lu2fcy,lu1sm,lu8yyn,lu1vd,lu2fgn,lu6eeg,aluar,ibm,showlog,sunsat,itrack,gridsquare,locator,gateway,ans,ariss,cubesat,amrad,g3ruh,Buenos Aires"
-        />
-        <meta
-            name="COPYRIGHT"
-            content="Copyright 1985-2025 Amsat Argentina on amsat.org.ar www.amsat.org.ar All rights Reserved. Todos los derechos Reservados"
-        />
-        <meta name="robots" content="none" />
-        <meta name="revisit-after" content="1 days" />
-        <meta http-equiv="Expires" content="Fri, Jun 12 1981 08:20:00 GMT" />
-        <meta name="google" value="notranslate" />
-        <meta http-equiv="Content-Language" content="en_US" />
-        <meta http-equiv="refresh" content="" />
 
-        <title>WSPRX</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>WSPR Balloon Tracker</title>
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load("current", {
+            packages: ["corechart"],
+        });
+    </script>
 
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/css/styleWsprx.min.css"
-        />
+    <!-- Replace Google Maps scripts with: -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        <script
-            type="text/javascript"
-            src="https://www.gstatic.com/charts/loader.js"
-        ></script>
-        <script type="text/javascript">
-            google.charts.load("current", {
-                packages: ["corechart"],
-            });
-        </script>
+    <!-- For arrow decorators (optional but recommended): -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.min.js"></script>
+    <!-- SunCalc for sun position -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
 
-        <script>
-            const readAsset = async ({ assetOutputType, assetUrl }) => {
-                try {
-                    return await window.parent.window.readAssetFile({
-                        assetOutputType,
-                        assetUrl,
-                    });
-                } catch (error) {
-                    return {
-                        statusCode: 400,
-                        data: [[]],
-                        error: "Something went wrong.",
-                    };
-                }
-            };
 
-            const loadDataTrackerjson = async () => {
-                try {
-                    window.HOST_URL = `${new URL(window.parent.window.location.href).origin}`;
-                    const browxySite =
-                        HOST_URL === "https://www.dev.browxy.com" ||
-                        HOST_URL === "https://www.browxy.com";
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/icon-config.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/constants.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/utils.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/ui-helpers.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/data-fetcher.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/distance-calculator.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/TelemetryRecords.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/decowspr.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/process-telemetry-1.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/process-telemetry-2.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/AppState.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/aprsi.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/map-data-builder.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/leaflet-map-manager.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/reporters-table.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/chart-helpers.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/charts-wsprx.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/form-control.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/export-data.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/v1.0.1/wsprx/main.min.js"></script>
 
-                    const assetUrl = browxySite
-                        ? `/customHtmlUrl?projectCompositeId=${window.parent.window.projectId}&hash=123&dwrSessionId=null&customFile=assets/datatracker.json&isSharedCustomPage=true`
-                        : `/api/v1/getAsset?file=${encodeURIComponent("share/assets/datatracker.json")}`;
+    <!-- Mobile Responsive Styles -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/css/v1.0.1/wsprx/styles-wsprx.min.css">
 
-                    let serverResponse;
+    <style>
+        .loader {
+            border: 8px solid var(--primary);
+            border-top: 8px solid var(--accent);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            animation: spin 1s linear infinite;
+            margin: 80px auto;
+        }
 
-                    if (browxySite) {
-                        const assetUrlResp = await readAsset({
-                            assetOutputType: "txt",
-                            assetUrl: assetUrl,
-                        });
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
 
-                        if (assetUrlResp.statusCode !== 200) {
-                            console.error(assetUrlResp.error);
-                            return {
-                                balloons: [],
-                                jsonArray: "[]",
-                                licenseData: [],
-                                newCalls: "",
-                                validCount: 0,
-                            };
-                        }
+<body>
+    <div class="main-container" id="main-container">
 
-                        const response = await readAsset({
-                            assetOutputType: "json",
-                            assetUrl: assetUrlResp.data,
-                        });
+        <!-- Menu with Balloon Search -->
+        <div class="menu">
+            <div class="menu-left">
+                <a href="https://balloons.browxy.com/home" target="_blank">Home</a>
+                <a href="https://balloons.browxy.com/wsprset" target="_blank">Wsprset</a>
+                <a href="#" id="dxLink" class="hidden" target="_blank">Dx</a>
+                <a href="https://balloons.browxy.com/vor" target="_blank">Vor</a>
+                <a href="#" id="chartLink" class="hidden" title='Plot Graphs if data available on aprs.fi'
+                    target="_blank">Charts</a>
+                <a href="#" id="slowerLink" target='_self' title='More points but slower'>[+]</a>
+                <a href='https://www.qrp-labs.com/tracking.html' target='_blank' title='U4B Settings'>U4B</a>
+                <a href="https://satellites.browxy.com/pass" target="_blank">Sats</a>
+            </div>
 
-                        if (response.statusCode !== 200) {
-                            console.error(response.error);
-                            return {
-                                balloons: [],
-                                jsonArray: "[]",
-                                licenseData: [],
-                                newCalls: "",
-                                validCount: 0,
-                            };
-                        }
-                        serverResponse = response.data;
-                    } else {
-                        const response = await readAsset({
-                            assetOutputType: "json",
-                            assetUrl,
-                        });
-                        serverResponse = response.data;
-                    }
-                    return serverResponse;
-                } catch (error) {
-                    console.error(error);
-                    return {
-                        balloons: [],
-                        jsonArray: "[]",
-                        licenseData: [],
-                        newCalls: "",
-                        validCount: 0,
-                    };
-                }
-            };
-        </script>
+            <div class="balloon-search-container">
+                <input type="text" class="balloon-search" id="balloon-search" placeholder="🔍 Search balloons... 🎈"
+                    autocomplete="off">
+                <button class="search-clear-btn" id="search-clear-btn" title="Clear search">✕</button>
+                <div class="balloon-dropdown" id="balloon-dropdown">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+            <div class="menu-right">
+                <h1 id="callTitleHeader">LU7AA</h1>
+            </div>
+        </div>
 
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/assetsSrc.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/commonAll.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/commonWsprx.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/indexWsprx.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/balloonLinkMenu.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/wsprxTelemetryUtils.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/wsprxTelemetry1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/wsprxTelemetry2.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/balloonLaunchedWsprx.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/bxyteam/balloons-lu7abf@main/frontend/js/suncalc.min.js"></script>
-    </head>
-    <body>
-        <form
-            name="formu"
-            id="formu"
-            style="
-                margin-bottom: 0;
-                margin-top: 0;
-                padding-top: 0px;
-                padding-bottom: 0px;
-            "
-        >
-            <div id="balloonsurl"></div>
+        <!-- Map -->
+        <div id="map-container" style="position: relative;">
+            <div id="map">
+                <div id="map-skeleton" class="skeleton"></div>
+            </div>
 
-            <input type="hidden" id="callsign" name="callsign" />
-            <input type="hidden" id="tracker" name="tracker" />
+            <div id="iconos"
+                style="z-index: 400;position: absolute; top: 120px; left: 15px; width: 35px !important; height: 300px; visibility: hidden; color: #ffffff; font-size: 15px; line-height: 13px; font-family: 'Arial Narrow' ! important; font-weight: normal; align-content: center; text-shadow: 1px 1px #000000;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icons-map"
+                    onclick="setid();">
+                    <title>UPDATE</title>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
+                    <path d="M20 4v5h-5" />
+                </svg>
+                <br style="height: 3px" />
+                <span id="Prox"></span> <br style="line-height: 1px" />
+                <br style="line-height: 4px" />
+                <a onclick="event.preventDefault();toggleSpots();" href="#" title="Show/Hide&#13; SPOTTERS"
+                    alt="Show/Hide&#13; SPOTTERS" class="icons-map-anchor">
+                    <span id="hide" name="hide" class="icons-map-anchor">HideSpots</span>
+                </a>
+                <br />
+                <br style="line-height: 4px" />
+                <a onclick="event.preventDefault();toggleTrack();" href="#" title="Show/Hide&#13;TRACK"
+                    alt="Show/Hide&#13;TRACK" class="icons-map-anchor">
+                    <span id="hidet" name="hidet" class="icons-map-anchor">HideTrack</span>
+                </a>
+                <br />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icons-map"
+                    onclick="gowinds()">
+                    <title>Surface WINDS&#13;CLOUD Tops</title>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M5 8h8.5a2.5 2.5 0 1 0 -2.34 -3.24" />
+                    <path d="M3 12h15.5a2.5 2.5 0 1 1 -2.34 3.24" />
+                    <path d="M4 16h5.5a2.5 2.5 0 1 1 -2.34 3.24" />
+                </svg>
+                <br style="line-height: 2px" />
+                <br style="line-height: 4px" />
+                <a href="#" onclick="gowinds1()" title="12Km Winds" class="icons-map-anchor">12 Km<br
+                        style="line-height: 1px" />Winds<br style="line-height: 1px" />~~~~~
+                </a>
+                <br style="line-height: 1px" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icons-map"
+                    onclick="goplanes()">
+                    <title>AIRCRAFT</title>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M16 10h4a2 2 0 0 1 0 4h-4l-4 7h-3l2 -7h-4l-2 2h-3l2 -4l-2 -4h3l2 2h4l-2 -7h3l4 7" />
+                </svg>
+                <br />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icons-map"
+                    onclick="goships();">
+                    <title>SHIPS</title>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M2 18h15.293c1.02 0 1.972 -.503 2.536 -1.34l2.171 -3.66h-18.479l-1.521 5" />
+                    <path d="M14 8l-1 -2" />
+                    <path d="M6.107 12.675l1.384 -4.675h8l2.675 4.598" />
+                </svg>
+                <br style="line-height: 5px" />
+                <br style="line-height: 3px" />
+                <a href="https://www.ready.noaa.gov/READY_balloon.php" title="HySplit" alt="HySplit" target="_blank"
+                    class="icons-map-anchor icons-map-anchor-blank">NOAA</a>
+                <br style="line-height: 1px" />
+                <a href="#" onclick="showprop()" title="Propagation" alt="Propagation"
+                    class="icons-map-anchor icons-map-anchor-blank">PROP</a>
+                <br style="line-height: 1px" />
+                <a href="http://kiwisdr.com/public/" target="_blank" title="KIWISDR"
+                    class="icons-map-anchor icons-map-anchor-blank">Kiwisdr</a>
+                <br style="line-height: 3px" />
+                <br style="line-height: 3px" />
+                <a href="https://www.paypal.me/AMSATARGENTINA/"
+                    title=" Please help keep site active, if possible&#13;&#xbb;Donate to Amsat Argentina, Thanks!&#xab;"
+                    target="_blank" style="text-decoration: none">
+                    <span style="
+                            height: 18px;
+                            width: 40px;
+                            font-size: 11px;
+                            line-height: 10px;
+                            border: outset;
+                            border-width: 1px;
+                            background-color: #4e7330;
+                            color: white;
+                            border-radius: 3px;
+                            border-color: white;
+                            cursor: pointer;
+                            text-shadow:
+                                1px 1px 0 black,
+                                2px 2px 0 black;
+                            text-decoration: none;
+                        ">
+                        <i>&nbsp;Donate&nbsp;<span style="color: red; font-size: 9px">&#10084;</span>&nbsp;
+                        </i>
+                    </span>
+                </a>
+                <br style="line-height: 1px" />
+                <a href="http://amsat.org.ar/comentar.html" target="_blank" title="Comment">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icons-map">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path
+                            d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" />
+                    </svg>
+                </a>
+                <br style="line-height: 3px" />
+                <span style="font-size: 14px">&nbsp;Spotters <br style="line-height: 8px" />Avg.Freq.
+                    <br style="line-height: 2px" />
+                    <br style="line-height: 2px" />
+                    <span id="avgfreq"></span><br style="line-height: 2px" />
+                    <b id="addPlus"></b>
+                </span>
+                <br style="line-height: 2px" />
+                <img title="updating" alt="updating" name="wdown" id="wdown" src="https://i.postimg.cc/KzYXZK7j/wdo.gif"
+                    width="27px" height="85px" style="width: 27px; height: 85px; visibility: hidden" />
+            </div>
+            <!-- Chart Container (overlay on map like ASP) -->
+            <div id="chart_div"
+                style="position:absolute;visibility:hidden;z-index:1000;background:white;border:2px solid #666;box-shadow:4px 4px 8px rgba(0,0,0,0.3);">
+            </div>
 
-            <section
-                style="
-                    display: grid;
-                    grid-template-columns: auto 1fr auto;
-                    gap: 5px;
-                    height: 80%;
-                "
-            >
-                <aside style="overflow: auto; justify-items: center">
-                    <div
-                        id="calink"
-                        name="calink"
-                        style="
-                            width: 90px;
-                            border: 0;
-                            height: 0;
-                            margin-right: 0;
-                            margin-left: 0;
-                            background-color: #213468;
-                            text-align: center;
-                            visibility: hidden;
-                            z-index: 1;
-                        "
-                    ></div>
-                </aside>
+            <!-- Chart Buttons (ASP exact style) -->
+            <div id="chart-buttons" class="chart-buttons-container chart-buttons-outer"
+                style="z-index:1001;display:none;flex-direction:column;gap:2px;padding: 10px 5px 0 0;">
+                <button id="0" class="chartbutton" onclick="drawChart(0)" title="Height meters">Height mtrs</button>
+                <button id="1" class="chartbutton" onclick="drawChart(1)" title="Height feet">Height Feet</button>
+                <button id="2" class="chartbutton" onclick="drawChart(2)" title="Solar Volts">Solar Volts</button>
+                <button id="3" class="chartbutton" onclick="drawChart(3)" title="Solar Elevation">Solar Elev.</button>
+                <button id="4" class="chartbutton" onclick="drawChart(4)" title="Speed Km/h">Speed Km/h</button>
+                <button id="12" class="chartbutton" onclick="drawChart(12)" title="Speed Knots">Speed Knots</button>
+                <button id="5" class="chartbutton" onclick="drawChart(5)" title="Ascent/Descent">Asc. / Desc.</button>
+                <button id="6" class="chartbutton" onclick="drawChart(6)" title="Temperature °C">Temperat. °C</button>
+                <button id="11" class="chartbutton" onclick="drawChart(11)" title="Temperature °F">Temperat. °F</button>
+                <button id="7" class="chartbutton" onclick="drawChart(7)" title="SNR dB Level">SNR dB Lvl</button>
+                <button id="8" class="chartbutton" onclick="drawChart(8)" title="Multiple">MULTIPLE</button>
+                <button id="9" class="chartbutton" onclick="drawChart(9)" title="Longitude">Longitude</button>
+                <button id="10" class="chartbutton" onclick="drawChart(10)" title="Frequency">Frequency</button>
+                <button id="15" class="chartbutton" onclick="drawChart(15)" title="Distance">Distance</button>
+                <button id="13" class="chartbutton" onclick="solarFlux();" title="Distance">Solar Flux</button>
+
+                <button class='chartbutton' style="margin-top: 10px;" onclick="event.preventDefault();stopChartCycle()"
+                    title="Go to Map"><img src="https://i.postimg.cc/GpGtk56G/map.png" width="76px"></button>
+                <span style="font-size:11px; margin-top: 8px;">&nbsp;Limit YYYYMMDD<br />&nbsp;&nbsp;
+                    <input type="text" size=8 onchange="checkdate();setid();" placeholder="YYYYMMDD"
+                        title="Set date limit&#13  for reports" maxlength="8" name="limit" id="limit" value=""
+                        style="font-family: fixedsys, consolas, monospace;font-weight:bold;font-size:14px;line-height:10px;background-image:url(https://i.postimg.cc/cLY0j8TN/rayas3.gif);width:71px;" />
+                </span>
+            </div>
+        </div>
+
+        <!-- Control Form with PROPER STYLES -->
+        <div class="control-form form-container" id="form-container">
+            <div id="aprsfi" class="form-row"></div>
+
+            <div class="form-row">
+                <a class="sondehub-link" href="https://amateur.sondehub.org" target="_blank"><span
+                        style=" color: transparent; text-shadow: 0 0 0 yellow;">🎈</spna></span>SH</a>
+
+                <a href="https://aprs.fi" target="_blank">
+                    <img src="https://raw.githubusercontent.com/bxyteam/balloons-lu7abf/refs/heads/main/frontend/images/aprs.png"
+                        alt="APRS" style="height:18px;vertical-align:middle;">
+                </a>
+
+                <a href="http://wsprnet.org" target="_blank"
+                    style="color:var(--primary);text-decoration:underline;font-weight:bold;">WSPRNET</a>
+                <form id="formu" onsubmit="event.preventDefault();">
+                    <input type="hidden" id="callsign" name="callsign" />
+                    <input type="hidden" id="tracker" name="tracker" />
+                    <label>
+                        Band:
+                        <select name="banda" id="banda" style="font-size:11px;font-weight:bold;"
+                            onchange="document.formu.callsign.value=AppState.config.callsignn;">
+                            <option value='2m'>2m</option>
+                            <option value='6'>6m</option>
+                            <option value='10m'>10m</option>
+                            <option value='12m'>12m</option>
+                            <option value='15m'>15m</option>
+                            <option value='17m'>17m</option>
+                            <option value='20m'>20m</option>
+                            <option value='30m'>30m</option>
+                            <option value='40m'>40m</option>
+                            <option value='80m'>80m</option>
+                            <option value='160'>160m</option>
+                            <option value='All' selected>ALL</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Launch:
+                        <span class="clickable-span" id="launch" onclick="setlaunch()"
+                            title="Click to change launch date/time">
+
+                        </span>
+                    </label>
+
+                    <label>
+                        Tracker:
+                        <span class="clickable-span" id="settracker" onclick="settracker();"
+                            title="Set tracker">T</span>
+                    </label>
+
+                    <label>
+                        Balloon Call:
+                        <input type="text" name="other" id="other" value="" size="8" style="text-transform:uppercase;">
+                        -
+                        <input type="text" name="SSID" id="SSID" value="" size="3">
+                    </label>
+
+                    <label>
+                        Channel:
+                        <span class="clickable-span" id="qrpchn" onclick="getqrp()"
+                            style="text-decoration:underline;"></span>
+                    </label>
+
+                    <label>
+                        Id: <input type="text" name="balloonid" id="balloonid" value="" size="2">
+                    </label>
+
+                    <label>
+                        Time-Slot: <input type="text" name="timeslot" id="timeslot" value="" size="1">
+                    </label>
+
+                    <label>
+                        +Detail <input type="checkbox" name="detail" id="detail">
+                    </label>
+
+                    <label>
+                        Telen <input type="checkbox" name="qp" id="qp">
+                    </label>
+
+                    <button class="ok-button" onclick="setid()">OK</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tables Container -->
+        <div class="tables-container" id="tables-container">
+            <button class="close-btn" onclick="closeOverlay()">×</button>
+
+            <div class="table-controls">
                 <div>
-                    <div
-                        id="gmap_chart_container"
-                        style="position: relative; width: 100%; height: 100%"
-                    >
-                        <div id="gMapLoader" class="loader"></div>
-                        <div id="mapDisplayError" style="display: none">
-                            <h4 style="text-align: center; color: red">
-                                The map could not be displayed because an error
-                                occurred while processing the data.
-                            </h4>
-                        </div>
-                        <iframe
-                            id="map_canvas"
-                            src="https://lu7aa.org/balloonGmap.html"
-                            style="
-                                border: none;
-                                height: 80%;
-                                width: 80%;
-                                margin-right: auto;
-                                margin-left: auto;
-                                background-color: #213468;
-                                display: block;
-                                overflow: hidden;
-                                visibility: hidden;
-                            "
-                        ></iframe>
-                        <div
-                            id="chart_div"
-                            style="
-                                position: absolute;
-                                top: 0px;
-                                left: 0px;
-                                width: 1078px;
-                                height: 514px;
-                                visibility: hidden;
-                                background-color: #f2f2f2;
-                                overflow: auto;
-                            "
-                        ></div>
-                        <div
-                            id="sacar"
-                            onclick="cerrar()"
-                            style="
-                                position: absolute;
-                                color: #ffffff;
-                                font-family: Tahoma;
-                            "
-                        ></div>
+                    <button id="overlay-button" class="overlay-button" onclick="toggleTableMode('overlay')">📋
+                        Overlay</button>
+                    <button onclick="toggleTableMode('fullscreen')">⛶ Fullscreen</button>
+                    <button onclick="exportActiveTableToCSV()">💾 Export</button>
+                </div>
+            </div>
+
+            <div class="table-tabs">
+                <div class="table-tab active" onclick="switchTab(event, 'telemetry1')">Telemetry 1</div>
+                <div class="table-tab" onclick="switchTab(event, 'telemetry2')">Telemetry 2</div>
+                <div class="table-tab" onclick="switchTab(event, 'reporters')">Spotters</div>
+            </div>
+
+            <div class="table-content">
+                <div id="panel-telemetry1" class="table-panel active">
+                    <div id="telemetry1-table">
+                        <table id="telemetry1-table-sk" class="skeleton skeleton-telemetry">
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-                <aside style="overflow: auto; justify-items: center">
-                    <div
-                        id="chdiv"
-                        name="chdiv"
-                        style="
-                            border: 0;
-                            height: 0;
-                            background-color: #313468;
-                            text-align: center;
-                            z-index: 3;
-                            font-size: 15px;
-                            font-weight: bold;
-                            line-height: 14px;
-                            visibility: hidden;
-                            opacity: 0.8;
-                        "
-                    ></div>
-                </aside>
-            </section>
+                <div id="panel-telemetry2" class="table-panel">
+                    <div id="telemetry2-table">
+                        <table id="telemetry2-table-sk" class="skeleton skeleton-telemetry">
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="panel-reporters" class="table-panel">
+                    <div id="reporters-table">
+                        <table id="reporters-table-sk" class="skeleton skeleton-telemetry">
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                            <tr class="skeleton-row">
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                                <td class="skeleton-cell"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="panel-charts" class="table-panel">
 
-            <div
-                id="aprsfi"
-                style="
-                    font-size: 11px;
-                    font-family: Tahoma, Arial;
-                    line-height: 9px;
-                    font-weight: bold;
-                    color: #ffffff;
-                    text-shadow: 0px 0px #000000;
-                    text-align: center;
-                "
-            ></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <center style="width: min-content; margin: auto">
-                <div
-                    id="estaciones"
-                    style="
-                        font-family: monospace;
-                        font-size: 14px;
-                        line-height: 11px;
-                        font-weight: normal;
-                        text-align: left;
-                        background-color: #fff7e6;
-                        white-space: nowrap;
-                        display: inline-block;
-                    "
-                ></div>
+    <div class="overlay-backdrop" id="overlay-backdrop" onclick="closeOverlay()"></div>
+    <center id="main-loader">
+        <div class="loader"></div>
+    </center>
+    <script>
 
-                <div id="telemetryTableContainer"></div>
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeOverlay();
+            } else if (e.ctrlKey && e.key === 'o') {
+                e.preventDefault();
+                toggleTableMode('overlay');
+            } else if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                toggleTableMode('fullscreen');
+            }
+        });
 
-                <div id="telemetryTableLoader" class="loader"></div>
-            </center>
-        </form>
-    </body>
+    </script>
+
+</body>
+
 </html>
