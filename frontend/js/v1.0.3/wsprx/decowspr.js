@@ -1,3 +1,34 @@
+function decoqrp(lcall, lloc, ldbm) {
+  try {
+    const E7 = lloc.charCodeAt(0) - 65; // A=0, B=1, etc.
+    const F7 = lloc.charCodeAt(1) - 65;
+    const G7 = lloc.charCodeAt(2) - 48; // 0=0, 1=1, etc.
+    const H7 = lloc.charCodeAt(3) - 48;
+
+    const F5A = lcall[1];
+    const H5A = lcall[3];
+    const I5A = lcall[4] || '';
+    const J5A = lcall[5] || ''; // May be empty
+
+    // Convert to numeric (ASP lines 307-310) - safe access
+    const F5 = isNaN(F5A) ? (F5A ? F5A.charCodeAt(0) - 55 : 0) : parseInt(F5A);
+    const H5 = isNaN(H5A) ? (H5A ? H5A.charCodeAt(0) - 65 : 0) : parseInt(H5A);
+    const I5 = isNaN(I5A) ? (I5A ? I5A.charCodeAt(0) - 65 : 0) : parseInt(I5A);
+    const J5 = isNaN(J5A) ? (J5A ? J5A.charCodeAt(0) - 65 : 0) : parseInt(J5A);
+
+    // Calculate telemetry values (ASP line 314)
+    const num1 = (F5 * 26 * 26 * 26 + H5 * 26 * 26 + I5 * 26 + J5) % 632736;
+    const num2 = Math.floor((E7 * 18 * 10 * 10 * 19 + F7 * 10 * 10 * 19 +
+      G7 * 10 * 19 + H7 * 19 + (powerDict[ldbm] || 0)) / 4) % 158184;
+
+    return String(num1).padStart(6, '0') + " " + String(num2).padStart(6, '0');
+  } catch (error) {
+    console.error("Error in decoqrp:", error);
+    return "";
+  }
+}
+
+
 /**
  * decowsprRefactored.js
  * Phase 2: Refactored decowspr Function
@@ -390,7 +421,7 @@ function decowspr(
           colorf = "</span>";
         }
 
-        const decoqrpResult = decoqrp(diahora, lcall, lloc, ldbm);
+        const decoqrpResult = decoqrp(lcall, lloc, ldbm);
         result.decodedInfo = colori + decoqrpResult + colorf;
       }
 
@@ -509,6 +540,7 @@ const speedStr = decoded.speed !== null && decoded.speed !== undefined
 
 if (typeof window !== 'undefined') {
   window.decowspr = decowspr;
+  window.decoqrp = decoqrp;
   window.buildTelemetryRow = buildTelemetryRow;
 
 }
@@ -516,6 +548,7 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     decowspr,
+    decoqrp,
     buildTelemetryRow,
     
   };
